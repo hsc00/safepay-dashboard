@@ -6,12 +6,12 @@ A high-performance PoC for a Financial Settlement Dashboard developed for SafePa
 
 ## Tech Stack
 
-* **React 19+** (Powered by Vite)
-* **TypeScript** (Strict Mode)
-* **Tailwind CSS** (High fidelity financial UI)
-* **Zod** (Schema validation & runtime type safety)
-* **SonarCloud** (Static analysis & Quality Gate integrated via CI/CD)
-* **Husky & Lint-staged** (Pre-commit hooks for code consistency)
+- **React 19** (Powered by Vite 6)
+- **TypeScript** (Strict Mode)
+- **Tailwind CSS v4** (High fidelity financial UI)
+- **Zod** (Schema validation & runtime type safety)
+- **SonarCloud** (Static analysis & Quality Gate integrated via CI/CD)
+- **Husky & Lint-staged** (Pre-commit hooks for code consistency)
 
 ## Features & Roadmap
 
@@ -25,11 +25,13 @@ A high-performance PoC for a Financial Settlement Dashboard developed for SafePa
 ## Getting Started
 
 1.  **Install Dependencies:**
+
     ```bash
     npm install
     ```
 
 2.  **Run Development Server:**
+
     ```bash
     npm run dev
     ```
@@ -43,6 +45,7 @@ A high-performance PoC for a Financial Settlement Dashboard developed for SafePa
 ## Development Standards
 
 This project adheres to rigorous fintech development standards:
-* **Conventional Commits:** All commit messages must follow the specification (e.g., `feat:`, `fix:`, `chore:`).
-* **Security by Design:** Data validation at the application boundaries using Zod schemas to prevent data poisoning.
-* **Clean Code:** Continuous monitoring via SonarCloud with a blocking Quality Gate on PRs.
+
+- **Conventional Commits:** All commit messages must follow the specification (e.g., `feat:`, `fix:`, `chore:`).
+- **Security by Design:** Data validation at the application boundaries using Zod schemas to prevent data poisoning.
+- **Clean Code:** Continuous monitoring via SonarCloud with a blocking Quality Gate on PRs.
