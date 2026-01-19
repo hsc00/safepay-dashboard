@@ -12,7 +12,7 @@ export const formatCurrency = (amount: number, currency: Currency): string => {
 };
 
 export const formatDate = (timestamp: string): string => {
-  return new Intl.DateTimeFormat("pt-PT", {
+  return new Intl.DateTimeFormat("de-CH", {
     day: "2-digit",
     month: "2-digit",
     year: "numeric",
