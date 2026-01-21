@@ -1,7 +1,7 @@
 import type { Transaction } from "../types";
 
 export const COMPLETED_TRANSACTION: Transaction = {
-  id: "tx_001",
+  id: "550e8400-e29b-41d4-a716-446655440000",
   amount: 1500.5,
   currency: "CHF",
   status: "COMPLETED",
@@ -11,7 +11,7 @@ export const COMPLETED_TRANSACTION: Transaction = {
 };
 
 export const PENDING_CRYPTO_TRANSACTION: Transaction = {
-  id: "tx_002",
+  id: "6ba7b810-9dad-11d1-80b4-00c04fd430c8",
   amount: -0.05,
   currency: "BTC",
   status: "PENDING",
@@ -21,7 +21,7 @@ export const PENDING_CRYPTO_TRANSACTION: Transaction = {
 };
 
 export const FLAGGED_TRANSACTION: Transaction = {
-  id: "tx_003",
+  id: "f47ac10b-58cc-4372-a567-0e02b2c3d479",
   amount: 50000,
   currency: "EUR",
   status: "FLAGGED",
@@ -31,7 +31,7 @@ export const FLAGGED_TRANSACTION: Transaction = {
 };
 
 export const CANCELLED_TRANSACTION: Transaction = {
-  id: "tx_004",
+  id: "f47ac10b-58af-4331-a897-0e02b2c3d980",
   amount: -450,
   currency: "CHF",
   status: "CANCELLED",
@@ -41,7 +41,7 @@ export const CANCELLED_TRANSACTION: Transaction = {
 };
 
 export const FAILED_TRANSACTION: Transaction = {
-  id: "tx_005",
+  id: "a17af42a-17ab-4331-a897-0e02a4f3d980",
   amount: 120,
   currency: "CHF",
   status: "FAILED",
