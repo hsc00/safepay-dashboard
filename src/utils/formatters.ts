@@ -1,22 +1,38 @@
-import type { Currency } from "../types";
+import { z } from "zod";
+import { TransactionSchema } from "../schemas/transactionSchema";
+
+type Transaction = z.infer<typeof TransactionSchema>;
+type Currency = Transaction["currency"];
 
 export const formatCurrency = (amount: number, currency: Currency): string => {
-  const fractionDigits = currency === "BTC" ? 8 : 2;
+  const isCrypto = currency === "BTC" || currency === "ETH";
 
-  return new Intl.NumberFormat("de-CH", {
+  const options: Intl.NumberFormatOptions = {
     style: "currency",
-    currency: currency,
-    minimumFractionDigits: fractionDigits,
-    maximumFractionDigits: fractionDigits,
-  }).format(amount);
+    currency: currency as string,
+    minimumFractionDigits: isCrypto ? 8 : 2,
+    maximumFractionDigits: isCrypto ? 8 : 2,
+  };
+
+  try {
+    return new Intl.NumberFormat("de-CH", options).format(amount);
+  } catch {
+    const value = amount.toLocaleString("de-CH", {
+      minimumFractionDigits: isCrypto ? 8 : 2,
+      maximumFractionDigits: isCrypto ? 8 : 2,
+    });
+    return `${value} ${currency}`;
+  }
 };
 
-export const formatDate = (timestamp: string): string => {
+export const formatDate = (date: Date | string): string => {
+  const dateObj = date instanceof Date ? date : new Date(date);
+
   return new Intl.DateTimeFormat("de-CH", {
     day: "2-digit",
     month: "2-digit",
     year: "numeric",
     hour: "2-digit",
     minute: "2-digit",
-  }).format(new Date(timestamp));
+  }).format(dateObj);
 };

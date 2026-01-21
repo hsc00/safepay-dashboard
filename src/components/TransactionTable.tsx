@@ -7,8 +7,28 @@ import {
   RISK_STYLES,
 } from "../utils/riskAssessment";
 import { THEME_COLORS } from "../constants/theme";
+import {
+  TransactionSchema,
+  type Transaction,
+} from "../schemas/transactionSchema";
 
 export const TransactionTable = () => {
+  const validatedTransactions: Transaction[] = MOCK_TRANSACTIONS.map(
+    (rawTransaction) => {
+      const validation = TransactionSchema.safeParse(rawTransaction);
+
+      if (!validation.success) {
+        console.error(
+          "Data integrity failure in Zurich node:",
+          validation.error,
+        );
+        return null;
+      }
+
+      return validation.data;
+    },
+  ).filter((transaction): transaction is Transaction => transaction !== null);
+
   return (
     <div className={STYLES.wrapper}>
       <div className={STYLES.header}>
@@ -30,8 +50,11 @@ export const TransactionTable = () => {
           </tr>
         </thead>
         <tbody className={STYLES.tbody}>
-          {MOCK_TRANSACTIONS.map((transaction) => {
-            const risk = getRiskLevel(transaction.amount, transaction.status);
+          {validatedTransactions.map((transaction) => {
+            const riskLevel = getRiskLevel(
+              transaction.amount,
+              transaction.status,
+            );
 
             return (
               <tr key={transaction.id} className={STYLES.tr}>
@@ -55,9 +78,9 @@ export const TransactionTable = () => {
                 <td className={STYLES.td}>
                   <div className="flex justify-center">
                     <span
-                      className={`${STYLES.badgeBase} ${RISK_STYLES[risk]}`}
+                      className={`${STYLES.badgeBase} ${RISK_STYLES[riskLevel]}`}
                     >
-                      {risk}
+                      {riskLevel}
                     </span>
                   </div>
                 </td>

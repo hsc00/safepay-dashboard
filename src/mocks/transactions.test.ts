@@ -1,40 +1,55 @@
 import { describe, it, expect } from "vitest";
 import * as Mocks from "./transactions";
+import { TransactionSchema } from "../schemas/transactionSchema";
+import { z } from "zod";
 
-describe("Detailed Transaction State Validation", () => {
-  it("should validate COMPLETED transactions as positive flow", () => {
+describe("Mocks Integrity via Zod Schema", () => {
+  it("should ensure all global mocks pass the TransactionSchema", () => {
+    Mocks.MOCK_TRANSACTIONS.forEach((transaction) => {
+      const result = TransactionSchema.safeParse(transaction);
+
+      if (!result.success) {
+        console.error(
+          `Mock ID ${transaction.id} failed validation:`,
+          z.treeifyError(result.error),
+        );
+      }
+
+      expect(result.success).toBe(true);
+    });
+  });
+
+  it("should validate COMPLETED transactions specifically", () => {
     const { COMPLETED_TRANSACTION } = Mocks;
-    expect(COMPLETED_TRANSACTION.status).toBe("COMPLETED");
-    expect(COMPLETED_TRANSACTION.amount).toBeGreaterThan(0);
+    const result = TransactionSchema.parse(COMPLETED_TRANSACTION);
+
+    expect(result.status).toBe("COMPLETED");
+    expect(result.amount).toBeGreaterThan(0);
+    expect(result.timestamp).toBeInstanceOf(Date);
   });
 
-  it("should validate PENDING crypto transactions", () => {
-    const { PENDING_CRYPTO_TRANSACTION } = Mocks;
-    expect(PENDING_CRYPTO_TRANSACTION.status).toBe("PENDING");
-    expect(PENDING_CRYPTO_TRANSACTION.currency).toBe("BTC");
-  });
-
-  it("should validate FLAGGED transactions for compliance", () => {
+  it("should validate FLAGGED transactions for compliance and EUR currency", () => {
     const { FLAGGED_TRANSACTION } = Mocks;
-    expect(FLAGGED_TRANSACTION.status).toBe("FLAGGED");
-    expect(FLAGGED_TRANSACTION.amount).toBe(50000.0);
+    const result = TransactionSchema.parse(FLAGGED_TRANSACTION);
+
+    expect(result.status).toBe("FLAGGED");
+    expect(result.currency).toBe("EUR");
+    expect(result.amount).toBe(50000);
   });
 
-  it("should validate CANCELLED transactions integrity", () => {
-    const { CANCELLED_TRANSACTION } = Mocks;
-    expect(CANCELLED_TRANSACTION.status).toBe("CANCELLED");
-    expect(CANCELLED_TRANSACTION.amount).toBeLessThan(0);
+  it("should validate the structure of a crypto PENDING transaction", () => {
+    const { PENDING_CRYPTO_TRANSACTION } = Mocks;
+    const result = TransactionSchema.parse(PENDING_CRYPTO_TRANSACTION);
+
+    expect(result.currency).toBe("BTC");
+    expect(result.amount).toBeLessThan(0);
   });
 
-  it("should validate FAILED transactions", () => {
-    const { FAILED_TRANSACTION } = Mocks;
-    expect(FAILED_TRANSACTION.status).toBe("FAILED");
-    expect(FAILED_TRANSACTION.description).toContain("Funds");
-  });
+  it("should ensure the global mock array contains all status types and valid UUIDs", () => {
+    const transactions = Mocks.MOCK_TRANSACTIONS;
+    const statuses = transactions.map((t) => t.status);
 
-  it("should ensure the global mock array contains all status types", () => {
-    const statusesInArray = Mocks.MOCK_TRANSACTIONS.map((t) => t.status);
-    const requiredStatuses = [
+    const expectedStatuses = [
       "COMPLETED",
       "PENDING",
       "FLAGGED",
@@ -42,8 +57,12 @@ describe("Detailed Transaction State Validation", () => {
       "FAILED",
     ];
 
-    requiredStatuses.forEach((status) => {
-      expect(statusesInArray).toContain(status);
+    expectedStatuses.forEach((status) => {
+      expect(statuses).toContain(status);
     });
+
+    const ids = transactions.map((t) => t.id);
+    const uniqueIds = new Set(ids);
+    expect(uniqueIds.size).toBe(transactions.length);
   });
 });
