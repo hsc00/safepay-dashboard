@@ -20,7 +20,7 @@ A high-performance PoC for a Financial Settlement Dashboard developed for SafePa
 - [x] **Code Quality:** Deep integration with SonarCloud (Bugs, Vulnerabilities, and Code Smells tracking).
 - [x] **Data Architecture:** Multi-currency transaction modeling (CHF, EUR, BTC, ETH).
 - [x] **Commit Security:** Git hooks to enforce Conventional Commits and formatting.
-- [ ] **Asset Management UI:** Global balance overview and liquidity monitoring.
+- [x] **Asset Management UI:** Global balance overview and liquidity monitoring.
 - [ ] **Real-time Activity Feed:** Transaction list with integrated risk-level assessment.
 
 ## Getting Started
