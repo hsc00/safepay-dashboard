@@ -12,7 +12,7 @@ export const COMPLETED_TRANSACTION: Transaction = {
 
 export const PENDING_CRYPTO_TRANSACTION: Transaction = {
   id: "6ba7b810-9dad-11d1-80b4-00c04fd430c8",
-  amount: -0.05,
+  amount: 0.05,
   currency: "BTC",
   status: "PENDING",
   counterparty: "External Wallet",

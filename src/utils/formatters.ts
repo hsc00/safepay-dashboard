@@ -5,7 +5,7 @@ type Transaction = z.infer<typeof TransactionSchema>;
 type Currency = Transaction["currency"];
 
 export const formatCurrency = (amount: number, currency: Currency): string => {
-  const isCrypto = currency === "BTC" || currency === "ETH";
+  const isCrypto = currency === "BTC";
 
   const options: Intl.NumberFormatOptions = {
     style: "currency",

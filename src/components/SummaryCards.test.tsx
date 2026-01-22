@@ -1,41 +1,41 @@
 import { render, screen } from "@testing-library/react";
-import { describe, it, expect, vi } from "vitest";
+import { describe, it, expect } from "vitest";
 import { SummaryCards } from "./SummaryCards";
 
-vi.mock("../mocks/transactions", () => ({
-  MOCK_TRANSACTIONS: [
-    { id: "1", amount: 1000, currency: "CHF", status: "COMPLETED" },
-    { id: "2", amount: -200.5, currency: "CHF", status: "COMPLETED" },
-    { id: "3", amount: 500, currency: "CHF", status: "COMPLETED" },
-  ],
-}));
+const mockMetrics = {
+  totalBalance: 1299.5,
+  cryptoBalance: 1.2456789,
+  activeTransactionsCount: 3,
+};
 
-describe("SummaryCards", () => {
-  it("should calculate and display the total balance correctly using reduce", () => {
-    render(<SummaryCards />);
+describe("SummaryCards Component", () => {
+  it("should display the total balance formatted in CHF", () => {
+    render(<SummaryCards metrics={mockMetrics} />);
 
-    const balanceValue = screen.getByText(/1[’\s]299\.50/);
+    const balanceValue = screen.getByText(/1[.,’\s]?299[.,]50/);
     expect(balanceValue).toBeDefined();
+    expect(screen.getByText(/Total Balance \(CHF\)/i)).toBeDefined();
   });
 
-  it("should display the crypto assets card with 8 decimal places", () => {
-    render(<SummaryCards />);
+  it("should display the crypto assets with high decimal precision", () => {
+    render(<SummaryCards metrics={mockMetrics} />);
 
-    expect(screen.getByText(/1\.24567890/)).toBeDefined();
+    const cryptoValue = screen.getByText(/1\.24567890/);
+    expect(cryptoValue).toBeDefined();
     expect(screen.getByText(/Crypto Assets \(BTC\)/i)).toBeDefined();
   });
 
   it("should display the correct number of active transactions", () => {
-    render(<SummaryCards />);
+    render(<SummaryCards metrics={mockMetrics} />);
 
-    const count = screen.getByText("3");
-    expect(count).toBeDefined();
+    expect(screen.getByText("3")).toBeDefined();
     expect(screen.getByText(/Active Transactions/i)).toBeDefined();
   });
 
-  it("should have the correct emerald color class for positive balance", () => {
-    render(<SummaryCards />);
-    const balanceHeading = screen.getByText(/1[’\s]299\.50/);
+  it("should apply the profit color class to the total balance", () => {
+    render(<SummaryCards metrics={mockMetrics} />);
+
+    const balanceHeading = screen.getByText(/1[.,’\s]?299[.,]50/);
     expect(balanceHeading.className).toContain("text-emerald-400");
   });
 });

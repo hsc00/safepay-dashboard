@@ -1,34 +1,35 @@
-import { MOCK_TRANSACTIONS } from "../mocks/transactions";
 import { formatCurrency } from "../utils/formatters";
 import { THEME_COLORS } from "../constants/theme";
 
-export const SummaryCards = () => {
-  const totalBalance = MOCK_TRANSACTIONS.reduce(
-    (acc, value) => acc + value.amount,
-    0,
-  );
-  const totalBTC = 1.2456789; // Mocked BTC balance
+interface SummaryCardsProps {
+  metrics: {
+    totalBalance: number;
+    cryptoBalance: number;
+    activeTransactionsCount: number;
+  };
+}
 
+export const SummaryCards = ({ metrics }: SummaryCardsProps) => {
   return (
     <div className={STYLES.grid}>
       <div className={STYLES.card}>
         <p className={STYLES.label}>Total Balance (CHF)</p>
         <h3 className={`${STYLES.value} ${THEME_COLORS.PROFIT}`}>
-          {formatCurrency(totalBalance, "CHF")}
+          {formatCurrency(metrics.totalBalance, "CHF")}
         </h3>
       </div>
 
       <div className={STYLES.card}>
         <p className={STYLES.label}>Crypto Assets (BTC)</p>
         <h3 className={`${STYLES.value} text-amber-400`}>
-          {formatCurrency(totalBTC, "BTC")}
+          {formatCurrency(metrics.cryptoBalance, "BTC")}
         </h3>
       </div>
 
       <div className={STYLES.card}>
         <p className={STYLES.label}>Active Transactions</p>
         <h3 className={`${STYLES.value} text-slate-100`}>
-          {MOCK_TRANSACTIONS.length}
+          {metrics.activeTransactionsCount}
         </h3>
       </div>
     </div>
