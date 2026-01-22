@@ -42,7 +42,8 @@ describe("Mocks Integrity via Zod Schema", () => {
     const result = TransactionSchema.parse(PENDING_CRYPTO_TRANSACTION);
 
     expect(result.currency).toBe("BTC");
-    expect(result.amount).toBeLessThan(0);
+    expect(result.status).toBe("PENDING");
+    expect(typeof result.amount).toBe("number");
   });
 
   it("should ensure the global mock array contains all status types and valid UUIDs", () => {

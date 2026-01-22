@@ -6,7 +6,7 @@ export const TransactionSchema = z.object({
   description: z.string(),
   amount: z.number().refine((num) => Number.isFinite(num)),
 
-  currency: z.enum(["CHF", "BTC", "ETH", "USD", "EUR"]),
+  currency: z.enum(["CHF", "BTC", "EUR"]),
 
   status: z.enum(["COMPLETED", "PENDING", "FAILED", "FLAGGED", "CANCELLED"]),
 

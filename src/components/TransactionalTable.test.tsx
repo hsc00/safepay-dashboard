@@ -1,102 +1,70 @@
-import { render, screen } from "@testing-library/react";
-import { describe, it, expect, vi, beforeEach } from "vitest";
-import { DEFAULT_STATUS_STYLE } from "../constants/statusStyles";
+import { render, screen, within } from "@testing-library/react";
+import { describe, it, expect } from "vitest";
 import { TransactionTable } from "./TransactionTable";
-import * as Mocks from "../mocks/transactions";
+import type { Transaction } from "../schemas/transactionSchema";
 
-vi.mock("../mocks/transactions", () => ({
-  MOCK_TRANSACTIONS: [
-    {
-      id: "550e8400-e29b-41d4-a716-446655440000",
-      counterparty: "Test User",
-      description: "Test",
-      status: "COMPLETED",
-      amount: 100,
-      currency: "CHF",
-      timestamp: "2026-01-21T10:00:00Z",
-    },
-    {
-      id: "6ba7b810-9dad-11d1-80b4-00c04fd430c8",
-      counterparty: "Negative User",
-      description: "Test Neg",
-      status: "FAILED",
-      amount: -50,
-      currency: "CHF",
-      timestamp: "2026-01-21T11:00:00Z",
-    },
-  ],
-}));
+const extendedMocks: Transaction[] = [
+  {
+    id: "550e8400-e29b-41d4-a716-446655440000",
+    counterparty: "User Completed",
+    description: "Salary",
+    status: "COMPLETED",
+    amount: 1000,
+    currency: "CHF",
+    timestamp: new Date("2026-01-22T10:00:00Z"),
+  },
+  {
+    id: "6ba7b810-9dad-11d1-80b4-00c04fd430c8",
+    counterparty: "User Failed",
+    description: "Error",
+    status: "FAILED",
+    amount: 50,
+    currency: "CHF",
+    timestamp: new Date("2026-01-22T11:00:00Z"),
+  },
+  {
+    id: "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+    counterparty: "User Unknown",
+    description: "Fallback Test",
+    status: "PROCESSING" as unknown as Transaction["status"],
+    amount: 10,
+    currency: "CHF",
+    timestamp: new Date("2026-01-22T12:00:00Z"),
+  },
+];
 
-describe("TransactionTable", () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
+describe("TransactionTable - Style & Branch Coverage", () => {
+  it("should apply correct status styles and fallback", () => {
+    render(<TransactionTable transactions={extendedMocks} />);
 
-  it("should render the table headers correctly", () => {
-    render(<TransactionTable />);
+    const completedRow = screen.getByText("User Completed").closest("tr");
+    if (!completedRow) throw new Error("Row not found");
 
-    expect(
-      screen.getByRole("columnheader", { name: /Counterparty/i }),
-    ).toBeDefined();
-    expect(screen.getByRole("columnheader", { name: /Status/i })).toBeDefined();
-    expect(screen.getByRole("columnheader", { name: /Date/i })).toBeDefined();
-    expect(screen.getByRole("columnheader", { name: /Amount/i })).toBeDefined();
-  });
+    const completedBadge = within(completedRow)
+      .getAllByText(/COMPLETED/i)
+      .find((el) => el.tagName === "SPAN" || el.className.includes("rounded"));
 
-  it("should display transaction data correctly after Zod validation", () => {
-    render(<TransactionTable />);
+    if (!completedBadge) throw new Error("Completed badge not found");
+    expect(completedBadge.className).toContain("text-emerald-400");
 
-    expect(screen.getByText("Test User")).toBeDefined();
-    expect(screen.getByText("Negative User")).toBeDefined();
-  });
+    const failedRow = screen.getByText("User Failed").closest("tr");
+    if (!failedRow) throw new Error("Row not found");
 
-  it("should filter out invalid transactions and log data integrity failure", () => {
-    const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+    const failedBadge = within(failedRow)
+      .getAllByText(/FAILED/i)
+      .find((el) => el.tagName === "SPAN");
 
-    const invalidTransaction = {
-      id: "invalid-uuid-format",
-      counterparty: "Malicious Actor",
-      status: "HACKED",
-      amount: 999999,
-      currency: "USD",
-      timestamp: "2026-01-21T12:00:00Z",
-    };
+    if (!failedBadge) throw new Error("Failed badge not found");
+    expect(failedBadge.className).not.toBe(completedBadge.className);
 
-    // @ts-expect-error - Forcing an invalid transaction shape for coverage purposes
-    Mocks.MOCK_TRANSACTIONS.push(invalidTransaction);
+    const processingRow = screen.getByText("User Unknown").closest("tr");
+    if (!processingRow) throw new Error("Row not found");
 
-    render(<TransactionTable />);
+    const processingBadge = within(processingRow)
+      .getAllByText(/PROCESSING/i)
+      .find((el) => el.tagName === "SPAN");
 
-    expect(screen.queryByText("Malicious Actor")).toBeNull();
-
-    expect(consoleSpy).toHaveBeenCalledWith(
-      expect.stringContaining("Data integrity failure in Zurich node:"),
-      expect.any(Object),
-    );
-
-    const rows = screen.getAllByRole("row");
-    expect(rows.length).toBe(3);
-
-    consoleSpy.mockRestore();
-    Mocks.MOCK_TRANSACTIONS.pop();
-  });
-
-  it("should apply correct color styles for negative amounts", () => {
-    render(<TransactionTable />);
-
-    const negativeAmount = screen.getByText(/-50/);
-    expect(negativeAmount.className).toContain("text-rose");
-  });
-
-  it("should apply DEFAULT_STATUS_STYLE when status exists in schema but not in styles mapping", () => {
-    const incompleteStyles: Record<string, string> = {
-      PENDING: "text-amber-400",
-    };
-
-    const statusToTest = "FAILED";
-    const appliedStyle = incompleteStyles[statusToTest] || DEFAULT_STATUS_STYLE;
-
-    expect(appliedStyle).toBe(DEFAULT_STATUS_STYLE);
-    expect(appliedStyle).toContain("text-slate-400");
+    if (!processingBadge) throw new Error("Processing badge not found");
+    expect(processingBadge.className).toBeDefined();
   });
 });

@@ -1,4 +1,3 @@
-import { MOCK_TRANSACTIONS } from "../mocks/transactions";
 import { STATUS_STYLES, DEFAULT_STATUS_STYLE } from "../constants/statusStyles";
 import { formatCurrency, formatDate } from "../utils/formatters";
 import {
@@ -7,34 +6,21 @@ import {
   RISK_STYLES,
 } from "../utils/riskAssessment";
 import { THEME_COLORS } from "../constants/theme";
-import {
-  TransactionSchema,
-  type Transaction,
-} from "../schemas/transactionSchema";
+import type { Transaction } from "../schemas/transactionSchema";
 
-export const TransactionTable = () => {
-  const validatedTransactions: Transaction[] = MOCK_TRANSACTIONS.map(
-    (rawTransaction) => {
-      const validation = TransactionSchema.safeParse(rawTransaction);
+interface TransactionTableProps {
+  transactions: Transaction[];
+}
 
-      if (!validation.success) {
-        console.error(
-          "Data integrity failure in Zurich node:",
-          validation.error,
-        );
-        return null;
-      }
-
-      return validation.data;
-    },
-  ).filter((transaction): transaction is Transaction => transaction !== null);
-
+export const TransactionTable = ({ transactions }: TransactionTableProps) => {
   return (
-    <div className={STYLES.wrapper}>
+    <section className={STYLES.wrapper} aria-labelledby="activity-feed-title">
       <div className={STYLES.header}>
-        <h2 className={STYLES.headerTitle}>Activity Feed</h2>
+        <h2 id="activity-feed-title" className={STYLES.headerTitle}>
+          Activity Feed
+        </h2>
         <div className={STYLES.nodeBadge}>
-          <span className={STYLES.nodeDot}></span>
+          <span className={`${STYLES.nodeDot} animate-pulse`}></span>
           <span className={STYLES.nodeText}>Live Node: Zurich</span>
         </div>
       </div>
@@ -50,7 +36,7 @@ export const TransactionTable = () => {
           </tr>
         </thead>
         <tbody className={STYLES.tbody}>
-          {validatedTransactions.map((transaction) => {
+          {transactions.map((transaction) => {
             const riskLevel = getRiskLevel(
               transaction.amount,
               transaction.status,
@@ -69,7 +55,9 @@ export const TransactionTable = () => {
 
                 <td className={STYLES.td}>
                   <span
-                    className={`${STYLES.badgeBase} ${STATUS_STYLES[transaction.status] || DEFAULT_STATUS_STYLE}`}
+                    className={`${STYLES.badgeBase} ${
+                      STATUS_STYLES[transaction.status] || DEFAULT_STATUS_STYLE
+                    }`}
                   >
                     {transaction.status}
                   </span>
@@ -92,7 +80,9 @@ export const TransactionTable = () => {
                 </td>
 
                 <td
-                  className={`${STYLES.td} ${STYLES.monoText} text-right font-bold ${getAmountColor(transaction.amount)}`}
+                  className={`${STYLES.td} ${STYLES.monoText} text-right font-bold ${getAmountColor(
+                    transaction.amount,
+                  )}`}
                 >
                   {formatCurrency(transaction.amount, transaction.currency)}
                 </td>
@@ -101,12 +91,12 @@ export const TransactionTable = () => {
           })}
         </tbody>
       </table>
-    </div>
+    </section>
   );
 };
 
 const STYLES = {
-  wrapper: `overflow-hidden rounded-xl border ${THEME_COLORS.BORDER} ${THEME_COLORS.BG_CARD} shadow-2xl`,
+  wrapper: `overflow-hidden rounded-xl border ${THEME_COLORS.BORDER} ${THEME_COLORS.BG_CARD} shadow-2xl transition-all duration-300`,
   header: `px-6 py-4 border-b ${THEME_COLORS.BORDER} flex justify-between items-center bg-slate-950/40`,
   headerTitle: `text-xs font-semibold ${THEME_COLORS.NEUTRAL} uppercase tracking-wider`,
   nodeBadge:
