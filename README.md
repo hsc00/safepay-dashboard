@@ -19,9 +19,10 @@ A high-performance PoC for a Financial Settlement Dashboard developed for SafePa
 - [x] **CI/CD Infrastructure:** Automated pipeline via GitHub Actions.
 - [x] **Code Quality:** Integration with SonarCloud.
 - [x] **Data Architecture:** Multi-currency transaction modeling (CHF, EUR, BTC).
-- [x] **Commit Security:** Git hooks to enforce Conventional Commits and formatting.
-- [x] **Asset Management UI:** Global balance overview and liquidity monitoring.
-- [x] **Real-time Activity Feed:** Transaction list with integrated risk-level assessment.
+- [x] **Multi-Currency Engine:** Real-time conversion (CHF, EUR, BTC) with logic-level branch coverage.
+- [x] **Secure Live Feed:** Transaction stream simulation using cryptographically secure randomness.
+- [ ] **Persistence Layer:** (Next) Implementation of IndexDB for offline-first settlement.
+- [ ] **WebSocket Integration:** Transition from polling simulation to real-time socket events.
 
 ## Getting Started
 
@@ -41,6 +42,8 @@ A high-performance PoC for a Financial Settlement Dashboard developed for SafePa
     ```bash
     npm run lint       # Run ESLint
     npm run typecheck  # Validate TypeScript types
+    npm run test       # Execute Vitest suite
+    npm run coverage   # Generate coverage report
     ```
 
 ## Development Standards
