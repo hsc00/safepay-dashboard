@@ -40,16 +40,7 @@ This document outlines the architectural choices made during the development of 
 - **Deterministic Mocks:** To test the "Live Feed", we mocked the `crypto` global object to inject controlled values, allowing for reproducible tests of both positive and negative price variations.
 - **DOM Resilience:** Used `within(row)` and `closest('tr')` in `TransactionTable` tests to ensure selectors remain stable even with complex, dense UI layouts.
 
-## 4. Decoupled Settlement State Mapping
-
-**Decision:** Abstracted status-specific UI logic into a centralized `STATUS_STYLES` constant engine.
-
-**Why:**
-
-- **Separation of Concerns:** The `TransactionTable` is agnostic of business rules for styling; it simply requests a style based on the `TransactionStatus`.
-- **Scalability:** Adding states like `ESCROW_HOLD` or `REVERSED` requires only one entry in the constants file, with zero regression risk in the core logic.
-
-## 5. Layout Density (Swiss Brutalism)
+## 4. Layout Density (Swiss Brutalism)
 
 **Decision:** Adopted a "High-Density" layout with reduced padding and a slate-based dark palette.
 **Why:**
