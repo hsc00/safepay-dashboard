@@ -21,7 +21,7 @@ This document outlines the architectural choices made during the development of 
 - **Boundary Protection:** In fintech, data poisoning is a critical risk. By using `TransactionSchema.safeParse`, we ensure that malformed data from "Zurich nodes" is caught before hitting the React state.
 - **Type-Safe Inference:** TypeScript types are derived directly from schemas (`z.infer`), preventing drift between static types and runtime behavior.
 
-## 2. Decoupled Settlement State Mapping
+## 3. Decoupled Settlement State Mapping
 
 **Decision:** Abstracted status-specific UI logic into a centralized `STATUS_STYLES` constant engine.
 
@@ -30,7 +30,7 @@ This document outlines the architectural choices made during the development of 
 - **Separation of Concerns:** The `TransactionTable` component remains agnostic of specific business rules for styling. It simply requests a style based on the `TransactionStatus` type.
 - **Design Scalability:** Adding new settlement states (e.g., `ESCROW_HOLD`, `REVERSED`) only requires a single entry in the constants file, ensuring zero regression in the table's core logic.
 
-## 3. Branch-Exhaustive Testing Strategy
+## 4. Branch-Exhaustive Testing Strategy
 
 **Decision:** Implementation of a "Strict Branch" testing strategy for hooks and components.
 
@@ -40,7 +40,7 @@ This document outlines the architectural choices made during the development of 
 - **Deterministic Mocks:** To test the "Live Feed", we mocked the `crypto` global object to inject controlled values, allowing for reproducible tests of both positive and negative price variations.
 - **DOM Resilience:** Used `within(row)` and `closest('tr')` in `TransactionTable` tests to ensure selectors remain stable even with complex, dense UI layouts.
 
-## 4. Layout Density (Swiss Brutalism)
+## 5. Layout Density (Swiss Brutalism)
 
 **Decision:** Adopted a "High-Density" layout with reduced padding and a slate-based dark palette.
 **Why:**

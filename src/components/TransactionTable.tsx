@@ -35,7 +35,7 @@ export const TransactionTable = ({ transactions }: TransactionTableProps) => {
             <th className={`${STYLES.th} text-right`}>Amount</th>
           </tr>
         </thead>
-        <tbody className={STYLES.tbody}>
+        <tbody className={STYLES.tbody} aria-live="polite" aria-atomic="false">
           {transactions.map((transaction) => {
             const riskLevel = getRiskLevel(
               transaction.amount,

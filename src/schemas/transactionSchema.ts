@@ -10,7 +10,7 @@ export const TransactionSchema = z.object({
 
   status: z.enum(["COMPLETED", "PENDING", "FAILED", "FLAGGED", "CANCELLED"]),
 
-  timestamp: z.string(),
+  timestamp: z.iso.datetime({ message: "Invalid ISO 8601 timestamp" }),
 });
 
 export type Transaction = z.infer<typeof TransactionSchema>;

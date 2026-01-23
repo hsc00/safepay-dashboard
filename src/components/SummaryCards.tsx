@@ -11,7 +11,7 @@ interface SummaryCardsProps {
 
 export const SummaryCards = ({ metrics }: SummaryCardsProps) => {
   return (
-    <div className={STYLES.grid}>
+    <div className={STYLES.grid} aria-label="Account Summary">
       <div className={STYLES.card}>
         <p className={STYLES.label}>Total Balance (CHF)</p>
         <h3 className={`${STYLES.value} ${THEME_COLORS.PROFIT}`}>

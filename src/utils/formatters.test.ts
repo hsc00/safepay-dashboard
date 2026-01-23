@@ -30,9 +30,9 @@ describe("Utility Formatters (Zod-aligned)", () => {
     it("should cover both crypto and fiat fallback paths in the catch block", () => {
       const numberFormatSpy = vi
         .spyOn(Intl, "NumberFormat")
-        .mockImplementation(() => {
+        .mockImplementation(function () {
           throw new Error("Force catch block");
-        });
+        } as unknown as typeof Intl.NumberFormat);
 
       const cryptoResult = formatCurrency(1.2345678912, "BTC");
       expect(cryptoResult).toContain("1.23456789");

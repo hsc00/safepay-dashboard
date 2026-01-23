@@ -1,18 +1,5 @@
-export type Currency = "CHF" | "EUR" | "BTC";
+import type { Transaction } from "../schemas/transactionSchema";
 
-export type TransactionStatus =
-  | "PENDING"
-  | "COMPLETED"
-  | "FAILED"
-  | "FLAGGED"
-  | "CANCELLED";
-
-export interface Transaction {
-  id: string;
-  amount: number;
-  currency: Currency;
-  status: TransactionStatus;
-  counterparty: string;
-  description: string;
-  timestamp: string;
-}
+export type { Transaction } from "../schemas/transactionSchema";
+export type Currency = Transaction["currency"];
+export type TransactionStatus = Transaction["status"];
