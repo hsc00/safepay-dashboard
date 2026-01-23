@@ -25,7 +25,7 @@ describe("Mocks Integrity via Zod Schema", () => {
 
     expect(result.status).toBe("COMPLETED");
     expect(result.amount).toBeGreaterThan(0);
-    expect(result.timestamp).toBeInstanceOf(Date);
+    expect(result.timestamp).toBe("2026-01-19T10:00:00Z");
   });
 
   it("should validate FLAGGED transactions for compliance and EUR currency", () => {

@@ -11,7 +11,7 @@ const extendedMocks: Transaction[] = [
     status: "COMPLETED",
     amount: 1000,
     currency: "CHF",
-    timestamp: new Date("2026-01-22T10:00:00Z"),
+    timestamp: "2026-01-22T10:00:00Z",
   },
   {
     id: "6ba7b810-9dad-11d1-80b4-00c04fd430c8",
@@ -20,7 +20,7 @@ const extendedMocks: Transaction[] = [
     status: "FAILED",
     amount: 50,
     currency: "CHF",
-    timestamp: new Date("2026-01-22T11:00:00Z"),
+    timestamp: "2026-01-22T11:00:00Z",
   },
   {
     id: "f47ac10b-58cc-4372-a567-0e02b2c3d479",
@@ -29,7 +29,7 @@ const extendedMocks: Transaction[] = [
     status: "PROCESSING" as unknown as Transaction["status"],
     amount: 10,
     currency: "CHF",
-    timestamp: new Date("2026-01-22T12:00:00Z"),
+    timestamp: "2026-01-22T12:00:00Z",
   },
 ];
 

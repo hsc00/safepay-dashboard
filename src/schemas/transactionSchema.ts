@@ -10,7 +10,7 @@ export const TransactionSchema = z.object({
 
   status: z.enum(["COMPLETED", "PENDING", "FAILED", "FLAGGED", "CANCELLED"]),
 
-  timestamp: z.coerce.date(),
+  timestamp: z.string(),
 });
 
 export type Transaction = z.infer<typeof TransactionSchema>;

@@ -46,7 +46,7 @@ describe("Utility Formatters (Zod-aligned)", () => {
 
   describe("formatDate", () => {
     it("should format Date objects to Swiss format (DD.MM.YYYY)", () => {
-      const date = new Date("2026-01-19T22:30:00Z");
+      const date = "2026-01-19T22:30:00Z";
       const result = formatDate(date);
 
       expect(result).toContain("19.01.2026");
@@ -60,11 +60,18 @@ describe("Utility Formatters (Zod-aligned)", () => {
     });
 
     it("should use 24h format consistently", () => {
-      const date = new Date("2026-01-19T15:45:00Z");
+      const date = "2026-01-19T15:45:00Z";
       const result = formatDate(date);
       expect(result).toContain("15:45");
       expect(result).not.toContain("PM");
       expect(result).not.toContain("AM");
+    });
+
+    it("should handle actual Date objects", () => {
+      const dateObj = new Date("2026-05-20T10:00:00Z");
+      const result = formatDate(dateObj);
+
+      expect(result).toContain("20.05.2026");
     });
   });
 });

@@ -41,7 +41,7 @@ describe("useActivityFeed", () => {
   let mockRandomValues: number[] = [];
 
   beforeEach(() => {
-    vi.useFakeTimers().setSystemTime(new Date("2026-01-22T19:00:00Z"));
+    vi.useFakeTimers().setSystemTime("2026-01-22T19:00:00Z");
 
     mockRandomValues = [];
 

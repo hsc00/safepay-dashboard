@@ -27,10 +27,9 @@ describe("TransactionSchema Unit Tests", () => {
     }
   });
 
-  it("should coerce a string timestamp into a Date object", () => {
+  it("should accept a string timestamp", () => {
     const result = TransactionSchema.parse(validTransaction);
-    expect(result.timestamp).toBeInstanceOf(Date);
-    expect(result.timestamp.getFullYear()).toBe(2026);
+    expect(result.timestamp).toBe("2026-01-21T10:00:00Z");
   });
 
   it("should fail for unsupported currencies", () => {
